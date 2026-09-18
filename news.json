@@ -10,6 +10,18 @@
       "category": "News - Malaysia",
       "tags": [],
       "date": "2026-09-18"
+    },
+    {
+      "title": "Modular Monolith Architecture: The Smart Default in 2026",
+      "summary": "The pragmatic default: modular monolith architecture   Hot take: microservices are...",
+      "url": "https://dev.to/nainikmehta/modular-monolith-architecture-the-smart-default-in-2026-nnc",
+      "source": "DEV Community",
+      "category": "News",
+      "tags": [
+        "it",
+        "software engineering"
+      ],
+      "date": "2026-09-18"
     }
   ]
 }
