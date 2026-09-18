@@ -106,9 +106,14 @@
       font-weight:500;
       margin:0 0 12px;
     }
-    .add-form,.edit-form{
+    .add-form{
       display:flex;
       flex-wrap:wrap;
+      gap:8px;
+    }
+    .edit-form{
+      display:flex;
+      flex-direction:column;
       gap:8px;
     }
     .url-input,.field-input,.category-select{
@@ -121,7 +126,7 @@
       font:inherit;
     }
     .url-input{ flex:1 1 300px; }
-    .field-input,.category-select{ flex:1 1 220px; }
+    .field-input,.category-select{ width:100%; }
     .url-input:focus,.field-input:focus,.category-select:focus{
       outline:2px solid var(--amber);
       outline-offset:1px;
@@ -153,6 +158,17 @@
       margin:0;
     }
     .edit-form .field-input[readonly]{ color:var(--slate); }
+    .edit-form .action-button{ align-self:flex-start; }
+    .field-group{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .field-label{
+      color:var(--slate);
+      font-size:0.78rem;
+      font-weight:600;
+    }
     .filters{
       max-width:760px;
       margin:22px auto 0;
@@ -304,12 +320,30 @@
     </form>
     <form class="edit-form article-preview" id="article-preview" hidden>
       <p class="preview-label">Review and tweak automatic details, then choose its category and tags.</p>
-      <input class="field-input" id="preview-title" placeholder="Article title" aria-label="Article title">
-      <input class="field-input" id="preview-summary" placeholder="Article summary" aria-label="Article summary">
-      <input class="field-input" id="preview-source" placeholder="Article source" aria-label="Article source">
-      <input class="field-input" id="preview-date" type="date" aria-label="Article date">
-      <select class="category-select" id="preview-category" aria-label="Article category"></select>
-      <input class="field-input" id="preview-tags" placeholder="Tags, separated by commas" aria-label="Article tags">
+      <div class="field-group">
+        <label class="field-label" for="preview-title">Title</label>
+        <input class="field-input" id="preview-title" placeholder="Article title" aria-label="Article title">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="preview-summary">Summary</label>
+        <input class="field-input" id="preview-summary" placeholder="Article summary" aria-label="Article summary">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="preview-source">Source</label>
+        <input class="field-input" id="preview-source" placeholder="Article source" aria-label="Article source">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="preview-date">Date</label>
+        <input class="field-input" id="preview-date" type="date" aria-label="Article date">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="preview-category">Category</label>
+        <select class="category-select" id="preview-category" aria-label="Article category"></select>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="preview-tags">Tags</label>
+        <input class="field-input" id="preview-tags" placeholder="Tags, separated by commas" aria-label="Article tags">
+      </div>
       <button class="action-button" type="submit">Add to dashboard</button>
     </form>
   </section>
@@ -603,6 +637,9 @@
         .replace(/'/g, '&#39;');
     }
   </script>
-
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/<unique-path>/script.js"></script>
   </body>
 </html>
