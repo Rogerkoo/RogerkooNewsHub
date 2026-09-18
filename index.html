@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rogerkoo's News Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#14181F;
+      --paper:#F7F5F0;
+      --amber:#E8A33D;
+      --slate:#5B6472;
+      --line:#DEDAD1;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:var(--paper);
+      color:var(--ink);
+      font-family:'Inter',-apple-system,sans-serif;
+      line-height:1.5;
+    }
+    header{
+      padding:56px 24px 32px;
+      max-width:760px;
+      margin:0 auto;
+      border-bottom:1px solid var(--line);
+    }
+    .masthead{
+      font-family:'Fraunces',serif;
+      font-weight:600;
+      font-size:clamp(2.4rem,6vw,3.2rem);
+      letter-spacing:-0.02em;
+      margin:0;
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+    }
+    .masthead .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--amber);
+      display:inline-block;
+      transform:translateY(-6px);
+    }
+    .tagline{
+      color:var(--slate);
+      font-size:1.05rem;
+      margin:10px 0 0;
+    }
+    .filters{
+      max-width:760px;
+      margin:22px auto 0;
+      padding:0 24px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .search-wrap{
+      position:relative;
+      flex:1 1 100%;
+    }
+    .search-input{
+      width:100%;
+      padding:11px 14px 11px 40px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:rgba(255,255,255,0.45);
+      color:var(--ink);
+      font:inherit;
+      font-size:0.95rem;
+    }
+    .search-input:focus{
+      outline:2px solid var(--amber);
+      outline-offset:1px;
+    }
+    .search-icon{
+      position:absolute;
+      left:14px;
+      top:50%;
+      color:var(--slate);
+      pointer-events:none;
+      transform:translateY(-50%);
+    }
+    .chip{
+      font-size:0.85rem;
+      padding:6px 14px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:transparent;
+      color:var(--slate);
+      cursor:pointer;
+      font-family:'Inter',sans-serif;
+      transition:border-color .15s ease, color .15s ease, background .15s ease;
+    }
+    .chip:hover{ border-color:var(--slate); color:var(--ink); }
+    .chip.active{
+      background:var(--ink);
+      border-color:var(--ink);
+      color:var(--paper);
+    }
+    main{
+      max-width:760px;
+      margin:0 auto;
+      padding:40px 24px 80px;
+    }
+    section.category{
+      margin-bottom:48px;
+    }
+    section.category.hidden{ display:none; }
+    .category-label{
+      font-family:'Fraunces',serif;
+      font-size:1.3rem;
+      font-weight:500;
+      margin:0 0 4px;
+    }
+    .category-count{
+      color:var(--slate);
+      font-size:0.85rem;
+      margin:0 0 18px;
+    }
+    article.story{
+      padding:18px 0;
+      border-top:1px solid var(--line);
+    }
+    article.story.hidden{ display:none; }
+    article.story a.title-link{
+      color:var(--ink);
+      text-decoration:none;
+      font-weight:600;
+      font-size:1.08rem;
+      display:block;
+      margin-bottom:6px;
+    }
+    article.story a.title-link:hover{ color:var(--amber); }
+    .summary{
+      color:var(--slate);
+      font-size:0.96rem;
+      margin:0 0 10px;
+      max-width:66ch;
+    }
+    .meta{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:0.8rem;
+      color:var(--slate);
+    }
+    .story-tags{
+      display:flex;
+      gap:6px;
+    }
+    .story-tags span{
+      background:rgba(232,163,61,0.15);
+      color:#8a5c17;
+      padding:2px 9px;
+      border-radius:12px;
+      font-size:0.75rem;
+    }
+    .empty-state{
+      color:var(--slate);
+      font-size:0.95rem;
+      padding:40px 0;
+    }
+    footer{
+      max-width:760px;
+      margin:0 auto;
+      padding:0 24px 60px;
+      color:var(--slate);
+      font-size:0.8rem;
+    }
+  </style>
+  </head>
+  <body>
+
+  <header>
+    <h1 class="masthead">Rogerkoo's News Hub</h1>
+    <p class="tagline" id="tagline">Loading&hellip;</p>
+  </header>
+
+  <div class="filters" id="filters"></div>
+
+  <main id="main">
+    <p class="empty-state">Loading news&hellip;</p>
+  </main>
+
+  <footer>Curated by Roger.</footer>
+
+  <script>
+    let allItems = [];
+    let activeTag = null;
+    let searchQuery = '';
+
+    fetch('news.json')
+      .then(res => res.json())
+      .then(data => {
+        document.title = data.dashboardTitle || "Rogerkoo's News Hub";
+        document.querySelector('.masthead').firstChild.textContent = data.dashboardTitle || "Rogerkoo's News Hub";
+        document.getElementById('tagline').textContent = data.dashboardTagline || '';
+        allItems = data.items || [];
+        renderFilters();
+        render();
+      })
+      .catch(() => {
+        document.getElementById('main').innerHTML =
+          '<p class="empty-state">Could not load news.json. If you are opening this file directly, run a local server (e.g. <code>python3 -m http.server</code>) or host it on GitHub Pages — browsers block local file reads for security.</p>';
+      });
+
+    function renderFilters(){
+      const tags = [...new Set(allItems.flatMap(i => i.tags || []))].sort();
+      const filtersEl = document.getElementById('filters');
+      filtersEl.innerHTML = '';
+
+      const searchWrap = document.createElement('label');
+      searchWrap.className = 'search-wrap';
+      searchWrap.setAttribute('aria-label', 'Search articles');
+      searchWrap.innerHTML = '<span class="search-icon" aria-hidden="true">&#128269;</span><input class="search-input" type="search" placeholder="Search articles..." aria-label="Search articles">';
+      const searchInput = searchWrap.querySelector('input');
+      searchInput.value = searchQuery;
+      searchInput.addEventListener('input', event => {
+        searchQuery = event.target.value.trim().toLowerCase();
+        render();
+      });
+      filtersEl.appendChild(searchWrap);
+
+      const allChip = document.createElement('button');
+      allChip.className = 'chip active';
+      allChip.textContent = 'All';
+      allChip.onclick = () => { activeTag = null; render(); updateChips(); };
+      filtersEl.appendChild(allChip);
+      tags.forEach(tag => {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.textContent = tag;
+        chip.onclick = () => { activeTag = tag; render(); updateChips(); };
+        filtersEl.appendChild(chip);
+      });
+    }
+
+    function updateChips(){
+      document.querySelectorAll('.chip').forEach(chip => {
+        const isAll = chip.textContent === 'All';
+        chip.classList.toggle('active', activeTag === null ? isAll : chip.textContent === activeTag);
+      });
+    }
+
+    function render(){
+      const main = document.getElementById('main');
+      main.innerHTML = '';
+
+      const categories = [...new Set(allItems.map(i => i.category))];
+      let anyVisible = false;
+
+      categories.forEach(cat => {
+        const itemsInCat = allItems.filter(i => i.category === cat);
+        const visibleItems = activeTag
+          ? itemsInCat.filter(i => (i.tags || []).includes(activeTag))
+          : itemsInCat;
+        const matchingItems = visibleItems.filter(item => {
+          if (!searchQuery) return true;
+          const searchableText = [
+            item.title,
+            item.summary,
+            item.source,
+            item.category,
+            ...(item.tags || [])
+          ].join(' ').toLowerCase();
+          return searchableText.includes(searchQuery);
+        });
+
+        if (matchingItems.length === 0) return;
+        anyVisible = true;
+
+        const section = document.createElement('section');
+        section.className = 'category';
+
+        const label = document.createElement('p');
+        label.className = 'category-label';
+        label.textContent = cat;
+        section.appendChild(label);
+
+        const count = document.createElement('p');
+        count.className = 'category-count';
+        count.textContent = matchingItems.length + (matchingItems.length === 1 ? ' story' : ' stories');
+        section.appendChild(count);
+
+        matchingItems
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .forEach(item => {
+            const art = document.createElement('article');
+            art.className = 'story';
+            art.innerHTML = `
+              <a class="title-link" href="${item.url}" target="_blank" rel="noopener">${item.title}</a>
+              <p class="summary">${item.summary || ''}</p>
+              <div class="meta">
+                <span>${item.source || ''}</span>
+                <span>&middot;</span>
+                <span>${formatDate(item.date)}</span>
+                <div class="story-tags">${(item.tags || []).map(t => `<span>${t}</span>`).join('')}</div>
+              </div>
+            `;
+            section.appendChild(art);
+          });
+
+        main.appendChild(section);
+      });
+
+      if (!anyVisible){
+        main.innerHTML = `<p class="empty-state">No stories match ${searchQuery ? 'your search' : 'this tag'} yet.</p>`;
+      }
+    }
+
+    function formatDate(dateStr){
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+  </script>
+
+  </body>
+</html>
