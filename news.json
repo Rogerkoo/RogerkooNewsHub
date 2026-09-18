@@ -30,7 +30,9 @@
       "url": "https://www.cnbc.com/2026/09/18/japan-raises-rates-30-year-high-yen-jgb.html",
       "source": "CNBC",
       "category": "News",
-      "tags": [],
+      "tags": [
+        "world news"
+      ],
       "date": "2026-09-18",
       "addedAt": "2026-09-18T10:04:41.615Z"
     }
