@@ -193,7 +193,7 @@
     let activeTag = null;
     let searchQuery = '';
 
-    fetch('news.json')
+    fetch(`news.json?v=${Date.now()}`, { cache:'no-store' })
       .then(res => res.json())
       .then(data => {
         document.title = data.dashboardTitle || "Rogerkoo's News Hub";
