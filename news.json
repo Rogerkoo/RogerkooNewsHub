@@ -39,6 +39,16 @@
       ],
       "date": "2026-09-18",
       "addedAt": "2026-09-18T10:04:41.615Z"
+    },
+    {
+      "title": "AI Agents Explained: How They Actually Work",
+      "summary": "AI agents explained: the real difference between a workflow and an agent, how tool-calling actually works, and why agents get stuck in loops.",
+      "url": "https://dev.to/amareswer/ai-agents-explained-how-they-actually-work-2c6d",
+      "source": "DEV Community",
+      "category": "News",
+      "tags": [],
+      "date": "2026-09-17",
+      "addedAt": "2026-09-18T10:49:56.760Z"
     }
   ]
 }
