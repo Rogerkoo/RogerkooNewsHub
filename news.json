@@ -8,20 +8,37 @@
       "url": "https://www.channelnewsasia.com/asia/malaysia-najib-razak-granted-house-arrest-pardons-board-6391971",
       "source": "CNA",
       "category": "News - Malaysia",
-      "tags": [],
-      "date": "2026-09-18"
+      "tags": [
+        "malaysia",
+        "malaysia news"
+      ],
+      "date": "2026-09-18",
+      "addedAt": ""
     },
     {
       "title": "Modular Monolith Architecture: The Smart Default in 2026",
       "summary": "The pragmatic default: modular monolith architecture   Hot take: microservices are...",
       "url": "https://dev.to/nainikmehta/modular-monolith-architecture-the-smart-default-in-2026-nnc",
       "source": "DEV Community",
-      "category": "News",
+      "category": "IT / Software Engineering",
       "tags": [
         "it",
         "software engineering"
       ],
-      "date": "2026-09-18"
+      "date": "2026-09-18",
+      "addedAt": ""
+    },
+    {
+      "title": "Bank of Japan raises interest rates to 31-year high, flags concerns over inflation",
+      "summary": "The decision was split 7-2, with board members Toichiro Asada and Ayano Sato dissenting from the hike.",
+      "url": "https://www.cnbc.com/2026/09/18/japan-raises-rates-30-year-high-yen-jgb.html",
+      "source": "CNBC",
+      "category": "News",
+      "tags": [
+        "world news"
+      ],
+      "date": "2026-09-18",
+      "addedAt": "2026-09-18T10:04:41.615Z"
     }
   ]
 }
