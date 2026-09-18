@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rogerkoo's News Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#14181F;
+      --paper:#F7F5F0;
+      --amber:#E8A33D;
+      --slate:#5B6472;
+      --line:#DEDAD1;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:var(--paper);
+      color:var(--ink);
+      font-family:'Inter',-apple-system,sans-serif;
+      line-height:1.5;
+    }
+    header{
+      padding:56px 24px 32px;
+      max-width:760px;
+      margin:0 auto;
+      border-bottom:1px solid var(--line);
+    }
+    .masthead{
+      font-family:'Fraunces',serif;
+      font-weight:600;
+      font-size:clamp(2.4rem,6vw,3.2rem);
+      letter-spacing:-0.02em;
+      margin:0;
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+    }
+    .masthead .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:var(--amber);
+      display:inline-block;
+      transform:translateY(-6px);
+    }
+    .tagline{
+      color:var(--slate);
+      font-size:1.05rem;
+      margin:10px 0 0;
+    }
+    .header-actions{
+      margin-top:16px;
+    }
+    .logout-button{
+      padding:8px 14px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:transparent;
+      color:var(--slate);
+      cursor:pointer;
+      font:500 0.85rem 'Inter',sans-serif;
+    }
+    .logout-button:hover{
+      border-color:var(--slate);
+      color:var(--ink);
+    }
+    .admin-login{
+      max-width:760px;
+      margin:24px auto 0;
+      padding:0 24px;
+    }
+    .admin-login form{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .admin-login input{
+      flex:0 1 380px;
+      width:100%;
+      min-width:0;
+    }
+    .admin-login .action-button{
+      padding:12px 24px;
+      flex:0 0 auto;
+    }
+    .admin-login .status{
+      flex:1 1 100%;
+    }
+    @media (max-width:520px){
+      .admin-login input,.admin-login .action-button{
+        flex-basis:100%;
+      }
+    }
+    .admin-login[hidden],.add-panel[hidden],.dashboard[hidden]{ display:none; }
+    .add-panel{
+      max-width:760px;
+      margin:24px auto 0;
+      padding:0 24px;
+    }
+    .add-panel h2{
+      font-family:'Fraunces',serif;
+      font-size:1.3rem;
+      font-weight:500;
+      margin:0 0 12px;
+    }
+    .add-form,.edit-form{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .url-input,.field-input,.category-select{
+      min-width:0;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:rgba(255,255,255,0.45);
+      color:var(--ink);
+      font:inherit;
+    }
+    .url-input{ flex:1 1 300px; }
+    .field-input,.category-select{ flex:1 1 220px; }
+    .url-input:focus,.field-input:focus,.category-select:focus{
+      outline:2px solid var(--amber);
+      outline-offset:1px;
+    }
+    .action-button{
+      padding:10px 16px;
+      border:1px solid var(--ink);
+      border-radius:6px;
+      background:var(--ink);
+      color:var(--paper);
+      cursor:pointer;
+      font:600 0.9rem 'Inter',sans-serif;
+    }
+    .action-button:disabled{ opacity:0.55; cursor:wait; }
+    .status{
+      flex:1 1 100%;
+      color:var(--slate);
+      font-size:0.85rem;
+      min-height:1.3em;
+      margin:2px 0 0;
+    }
+    .status.error{ color:#a43f35; }
+    .article-preview{ margin-top:14px; }
+    .article-preview[hidden]{ display:none; }
+    .preview-label{
+      flex:1 1 100%;
+      color:var(--slate);
+      font-size:0.8rem;
+      margin:0;
+    }
+    .edit-form .field-input[readonly]{ color:var(--slate); }
+    .filters{
+      max-width:760px;
+      margin:22px auto 0;
+      padding:0 24px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .search-wrap{
+      position:relative;
+      flex:1 1 100%;
+    }
+    .search-input{
+      width:100%;
+      padding:11px 14px 11px 40px;
+      border:1px solid var(--line);
+      border-radius:6px;
+      background:rgba(255,255,255,0.45);
+      color:var(--ink);
+      font:inherit;
+      font-size:0.95rem;
+    }
+    .search-input:focus{
+      outline:2px solid var(--amber);
+      outline-offset:1px;
+    }
+    .search-icon{
+      position:absolute;
+      left:14px;
+      top:50%;
+      color:var(--slate);
+      pointer-events:none;
+      transform:translateY(-50%);
+    }
+    .chip{
+      font-size:0.85rem;
+      padding:6px 14px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:transparent;
+      color:var(--slate);
+      cursor:pointer;
+      font-family:'Inter',sans-serif;
+      transition:border-color .15s ease, color .15s ease, background .15s ease;
+    }
+    .chip:hover{ border-color:var(--slate); color:var(--ink); }
+    .chip.active{
+      background:var(--ink);
+      border-color:var(--ink);
+      color:var(--paper);
+    }
+    main{
+      max-width:760px;
+      margin:0 auto;
+      padding:40px 24px 80px;
+    }
+    section.category{
+      margin-bottom:48px;
+    }
+    section.category.hidden{ display:none; }
+    .category-label{
+      font-family:'Fraunces',serif;
+      font-size:1.3rem;
+      font-weight:500;
+      margin:0 0 4px;
+    }
+    .category-count{
+      color:var(--slate);
+      font-size:0.85rem;
+      margin:0 0 18px;
+    }
+    article.story{
+      padding:18px 0;
+      border-top:1px solid var(--line);
+    }
+    article.story.hidden{ display:none; }
+    article.story a.title-link{
+      color:var(--ink);
+      text-decoration:none;
+      font-weight:600;
+      font-size:1.08rem;
+      display:block;
+      margin-bottom:6px;
+    }
+    article.story a.title-link:hover{ color:var(--amber); }
+    .summary{
+      color:var(--slate);
+      font-size:0.96rem;
+      margin:0 0 10px;
+      max-width:66ch;
+    }
+    .meta{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:0.8rem;
+      color:var(--slate);
+    }
+    .story-tags{
+      display:flex;
+      gap:6px;
+    }
+    .story-tags span{
+      background:rgba(232,163,61,0.15);
+      color:#8a5c17;
+      padding:2px 9px;
+      border-radius:12px;
+      font-size:0.75rem;
+    }
+    .empty-state{
+      color:var(--slate);
+      font-size:0.95rem;
+      padding:40px 0;
+    }
+    footer{
+      max-width:760px;
+      margin:0 auto;
+      padding:0 24px 60px;
+      color:var(--slate);
+      font-size:0.8rem;
+    }
+  </style>
+  </head>
+  <body>
+
+  <header>
+    <h1 class="masthead">Rogerkoo's News Hub</h1>
+    <p class="tagline" id="tagline">Private admin dashboard</p>
+    <div class="header-actions" id="header-actions" hidden>
+      <button class="logout-button" type="button" id="logout-button">Sign out</button>
+    </div>
+  </header>
+
+  <section class="admin-login" id="admin-login" aria-labelledby="login-heading">
+    <h2 id="login-heading">Admin sign in</h2>
+    <form id="login-form">
+      <input class="url-input" id="admin-password" type="password" placeholder="Admin password" aria-label="Admin password" required>
+      <button class="action-button" type="submit">Sign in</button>
+      <p class="status" id="login-status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section class="add-panel" id="add-panel" aria-labelledby="add-heading" hidden>
+    <h2 id="add-heading">Add an article</h2>
+    <form class="add-form" id="add-form">
+      <input class="url-input" id="article-url" type="url" placeholder="Paste an article URL" aria-label="Article URL" required>
+      <button class="action-button" type="submit">Fetch article</button>
+      <p class="status" id="add-status" aria-live="polite"></p>
+    </form>
+    <form class="edit-form article-preview" id="article-preview" hidden>
+      <p class="preview-label">Review and tweak automatic details, then choose its category and tags.</p>
+      <input class="field-input" id="preview-title" placeholder="Article title" aria-label="Article title">
+      <input class="field-input" id="preview-summary" placeholder="Article summary" aria-label="Article summary">
+      <input class="field-input" id="preview-source" placeholder="Article source" aria-label="Article source">
+      <input class="field-input" id="preview-date" type="date" aria-label="Article date">
+      <select class="category-select" id="preview-category" aria-label="Article category"></select>
+      <input class="field-input" id="preview-tags" placeholder="Tags, separated by commas" aria-label="Article tags">
+      <button class="action-button" type="submit">Add to dashboard</button>
+    </form>
+  </section>
+
+  <div class="filters dashboard" id="filters" hidden></div>
+
+  <main class="dashboard" id="main" hidden>
+    <p class="empty-state">Sign in to load your news dashboard.</p>
+  </main>
+
+  <footer>Curated by Roger.</footer>
+
+  <script>
+    let allItems = [];
+    let activeTag = null;
+    let searchQuery = '';
+    let pendingItem = null;
+    const categories = ['News', 'News - Malaysia', 'IT / Software Engineering', 'Business', 'Cars', 'AI', 'Science', 'Lifestyle', 'Sports', 'Technology', 'Entertainment'];
+
+    document.getElementById('login-form').addEventListener('submit', login);
+    document.getElementById('logout-button').addEventListener('click', logout);
+    document.getElementById('add-form').addEventListener('submit', fetchArticle);
+    document.getElementById('article-preview').addEventListener('submit', addArticle);
+    document.getElementById('preview-category').innerHTML = categories.map(category => `<option>${escapeHtml(category)}</option>`).join('');
+    checkSession();
+
+    async function checkSession(){
+      try {
+        const response = await fetch('/api/session');
+        const result = await response.json();
+        if (!result.configured) {
+          document.getElementById('main').hidden = false;
+          document.getElementById('main').innerHTML =
+            '<p class="empty-state">Admin backend is not configured yet. Set <code>NEWS_ADMIN_PASSWORD</code>, <code>GITHUB_TOKEN</code>, and <code>GITHUB_REPO</code> in Vercel project settings.</p>';
+          return;
+        }
+        setAdminState(result.authenticated);
+        if (result.authenticated) await loadNews();
+      } catch {
+        document.getElementById('main').hidden = false;
+        document.getElementById('main').innerHTML =
+          '<p class="empty-state">Could not reach the admin API. If you are running locally, start the server with <code>python server.py</code>.</p>';
+      }
+    }
+
+    async function loadNews(){
+      const response = await fetch('/api/news');
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not load news from API.');
+      document.title = data.dashboardTitle || "Rogerkoo's News Hub";
+      document.querySelector('.masthead').firstChild.textContent = data.dashboardTitle || "Rogerkoo's News Hub";
+      document.getElementById('tagline').textContent = data.dashboardTagline || '';
+      allItems = data.items || [];
+      renderFilters();
+      render();
+    }
+
+    async function login(event){
+      event.preventDefault();
+      const status = document.getElementById('login-status');
+      try {
+        const response = await fetch('/api/login', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({password:document.getElementById('admin-password').value})
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Sign in failed.');
+        document.getElementById('login-form').reset();
+        status.textContent = '';
+        setAdminState(true);
+        try {
+          await loadNews();
+        } catch (error) {
+          document.getElementById('main').innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+        }
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = error.message;
+      }
+    }
+
+    async function logout(){
+      await fetch('/api/logout', { method:'POST' });
+      allItems = [];
+      activeTag = null;
+      searchQuery = '';
+      pendingItem = null;
+      document.getElementById('add-form').reset();
+      document.getElementById('article-preview').hidden = true;
+      document.getElementById('add-status').textContent = '';
+      setAdminState(false);
+      document.getElementById('filters').innerHTML = '';
+      document.getElementById('main').innerHTML = '<p class="empty-state">Sign in to load your news dashboard.</p>';
+    }
+
+    function setAdminState(authenticated){
+      document.getElementById('admin-login').hidden = authenticated;
+      document.getElementById('add-panel').hidden = !authenticated;
+      document.getElementById('header-actions').hidden = !authenticated;
+      document.getElementById('filters').hidden = !authenticated;
+      document.getElementById('main').hidden = !authenticated;
+    }
+
+    async function fetchArticle(event){
+      event.preventDefault();
+      const status = document.getElementById('add-status');
+      const button = event.target.querySelector('button');
+      status.className = 'status';
+      status.textContent = 'Fetching article details...';
+      button.disabled = true;
+      try {
+        const response = await fetch('/api/preview', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({url:document.getElementById('article-url').value})
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Could not fetch that article.');
+        pendingItem = result.item;
+        document.getElementById('preview-title').value = pendingItem.title;
+        document.getElementById('preview-summary').value = pendingItem.summary;
+        document.getElementById('preview-source').value = pendingItem.source;
+        document.getElementById('preview-date').value = pendingItem.date;
+        document.getElementById('preview-category').value = 'News';
+        document.getElementById('preview-tags').value = '';
+        document.getElementById('article-preview').hidden = false;
+        status.textContent = 'Details found. Choose a category and add tags.';
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function addArticle(event){
+      event.preventDefault();
+      const status = document.getElementById('add-status');
+      const button = event.target.querySelector('button');
+      const item = {
+        ...pendingItem,
+        title: document.getElementById('preview-title').value.trim(),
+        summary: document.getElementById('preview-summary').value.trim(),
+        source: document.getElementById('preview-source').value.trim(),
+        date: document.getElementById('preview-date').value,
+        category: document.getElementById('preview-category').value,
+        tags: document.getElementById('preview-tags').value
+      };
+      button.disabled = true;
+      status.className = 'status';
+      status.textContent = 'Saving article...';
+      try {
+        const response = await fetch('/api/add', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({item})
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Could not save the article.');
+        allItems.push(result.item);
+        renderFilters();
+        render();
+        document.getElementById('add-form').reset();
+        document.getElementById('article-preview').hidden = true;
+        pendingItem = null;
+        status.textContent = 'Article added to the dashboard.';
+      } catch (error) {
+        status.className = 'status error';
+        status.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function renderFilters(){
+      const tags = [...new Set(allItems.flatMap(i => i.tags || []))].sort();
+      const filtersEl = document.getElementById('filters');
+      filtersEl.innerHTML = '';
+
+      const searchWrap = document.createElement('label');
+      searchWrap.className = 'search-wrap';
+      searchWrap.setAttribute('aria-label', 'Search articles');
+      searchWrap.innerHTML = '<span class="search-icon" aria-hidden="true">&#128269;</span><input class="search-input" type="search" placeholder="Search articles..." aria-label="Search articles">';
+      const searchInput = searchWrap.querySelector('input');
+      searchInput.value = searchQuery;
+      searchInput.addEventListener('input', event => {
+        searchQuery = event.target.value.trim().toLowerCase();
+        render();
+      });
+      filtersEl.appendChild(searchWrap);
+
+      const allChip = document.createElement('button');
+      allChip.className = 'chip active';
+      allChip.textContent = 'All';
+      allChip.onclick = () => { activeTag = null; render(); updateChips(); };
+      filtersEl.appendChild(allChip);
+      tags.forEach(tag => {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.textContent = tag;
+        chip.onclick = () => { activeTag = tag; render(); updateChips(); };
+        filtersEl.appendChild(chip);
+      });
+    }
+
+    function updateChips(){
+      document.querySelectorAll('.chip').forEach(chip => {
+        const isAll = chip.textContent === 'All';
+        chip.classList.toggle('active', activeTag === null ? isAll : chip.textContent === activeTag);
+      });
+    }
+
+    function render(){
+      const main = document.getElementById('main');
+      main.innerHTML = '';
+
+      const categories = [...new Set(allItems.map(i => i.category))];
+      let anyVisible = false;
+
+      categories.forEach(cat => {
+        const itemsInCat = allItems.filter(i => i.category === cat);
+        const visibleItems = activeTag
+          ? itemsInCat.filter(i => (i.tags || []).includes(activeTag))
+          : itemsInCat;
+        const matchingItems = visibleItems.filter(item => {
+          if (!searchQuery) return true;
+          const searchableText = [
+            item.title,
+            item.summary,
+            item.source,
+            item.category,
+            ...(item.tags || [])
+          ].join(' ').toLowerCase();
+          return searchableText.includes(searchQuery);
+        });
+
+        if (matchingItems.length === 0) return;
+        anyVisible = true;
+
+        const section = document.createElement('section');
+        section.className = 'category';
+
+        const label = document.createElement('p');
+        label.className = 'category-label';
+        label.textContent = cat;
+        section.appendChild(label);
+
+        const count = document.createElement('p');
+        count.className = 'category-count';
+        count.textContent = matchingItems.length + (matchingItems.length === 1 ? ' story' : ' stories');
+        section.appendChild(count);
+
+        matchingItems
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .forEach(item => {
+            const art = document.createElement('article');
+            art.className = 'story';
+            art.innerHTML = `
+              <a class="title-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a>
+              <p class="summary">${escapeHtml(item.summary || '')}</p>
+              <div class="meta">
+                <span>${escapeHtml(item.source || '')}</span>
+                <span>&middot;</span>
+                <span>${escapeHtml(formatDate(item.date))}</span>
+                <div class="story-tags">${(item.tags || []).map(t => `<span>${escapeHtml(t)}</span>`).join('')}</div>
+              </div>
+            `;
+            section.appendChild(art);
+          });
+
+        main.appendChild(section);
+      });
+
+      if (!anyVisible){
+        main.innerHTML = `<p class="empty-state">No stories match ${searchQuery ? 'your search' : 'this tag'} yet.</p>`;
+      }
+    }
+
+    function formatDate(dateStr){
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function escapeHtml(value){
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+  </script>
+
+  </body>
+</html>
