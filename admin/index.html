@@ -159,6 +159,33 @@
     }
     .edit-form .field-input[readonly]{ color:var(--slate); }
     .edit-form .action-button{ align-self:flex-start; }
+    .management-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:0 0 16px;
+    }
+    .danger-button{
+      padding:8px 12px;
+      border:1px solid #a43f35;
+      border-radius:6px;
+      background:transparent;
+      color:#a43f35;
+      cursor:pointer;
+      font:600 0.8rem 'Inter',sans-serif;
+    }
+    .danger-button:hover{ background:#a43f35; color:var(--paper); }
+    .story-actions{ display:flex; gap:8px; margin-top:12px; }
+    .story-action{
+      padding:5px 10px;
+      border:1px solid var(--line);
+      border-radius:5px;
+      background:transparent;
+      color:var(--slate);
+      cursor:pointer;
+      font:500 0.75rem 'Inter',sans-serif;
+    }
+    .story-action:hover{ border-color:var(--ink); color:var(--ink); }
     .field-group{
       display:flex;
       flex-direction:column;
@@ -313,6 +340,9 @@
 
   <section class="add-panel" id="add-panel" aria-labelledby="add-heading" hidden>
     <h2 id="add-heading">Add an article</h2>
+    <div class="management-actions">
+      <button class="danger-button" type="button" id="keep-today-button">Delete all except added today</button>
+    </div>
     <form class="add-form" id="add-form">
       <input class="url-input" id="article-url" type="url" placeholder="Paste an article URL" aria-label="Article URL" required>
       <button class="action-button" type="submit">Fetch article</button>
@@ -361,12 +391,15 @@
     let activeTag = null;
     let searchQuery = '';
     let pendingItem = null;
+    let editMode = false;
+    let originalUrl = '';
     const categories = ['News', 'News - Malaysia', 'IT / Software Engineering', 'Business', 'Cars', 'AI', 'Science', 'Lifestyle', 'Sports', 'Technology', 'Entertainment'];
 
     document.getElementById('login-form').addEventListener('submit', login);
     document.getElementById('logout-button').addEventListener('click', logout);
     document.getElementById('add-form').addEventListener('submit', fetchArticle);
     document.getElementById('article-preview').addEventListener('submit', addArticle);
+    document.getElementById('keep-today-button').addEventListener('click', keepToday);
     document.getElementById('preview-category').innerHTML = categories.map(category => `<option>${escapeHtml(category)}</option>`).join('');
     checkSession();
 
@@ -463,6 +496,8 @@
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Could not fetch that article.');
         pendingItem = result.item;
+        editMode = false;
+        originalUrl = '';
         document.getElementById('preview-title').value = pendingItem.title;
         document.getElementById('preview-summary').value = pendingItem.summary;
         document.getElementById('preview-source').value = pendingItem.source;
@@ -470,6 +505,7 @@
         document.getElementById('preview-category').value = 'News';
         document.getElementById('preview-tags').value = '';
         document.getElementById('article-preview').hidden = false;
+        document.querySelector('#article-preview button[type="submit"]').textContent = 'Add to dashboard';
         status.textContent = 'Details found. Choose a category and add tags.';
       } catch (error) {
         status.className = 'status error';
@@ -496,26 +532,69 @@
       status.className = 'status';
       status.textContent = 'Saving article...';
       try {
-        const response = await fetch('/api/add', {
+        const wasEditing = editMode;
+        const response = await fetch(editMode ? '/api/update' : '/api/add', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({item})
+          body:JSON.stringify(editMode ? {item, originalUrl} : {item})
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Could not save the article.');
-        allItems.push(result.item);
+        if (editMode) {
+          const index = allItems.findIndex(existing => existing.url === originalUrl);
+          if (index >= 0) allItems[index] = result.item;
+        } else {
+          allItems.push(result.item);
+        }
         renderFilters();
         render();
         document.getElementById('add-form').reset();
         document.getElementById('article-preview').hidden = true;
         pendingItem = null;
-        status.textContent = 'Article added to the dashboard.';
+        editMode = false;
+        originalUrl = '';
+        status.textContent = wasEditing ? 'Article updated.' : 'Article added to the dashboard.';
       } catch (error) {
         status.className = 'status error';
         status.textContent = error.message;
       } finally {
         button.disabled = false;
       }
+    }
+
+    function editArticle(item){
+      pendingItem = item;
+      editMode = true;
+      originalUrl = item.url;
+      document.getElementById('preview-title').value = item.title || '';
+      document.getElementById('preview-summary').value = item.summary || '';
+      document.getElementById('preview-source').value = item.source || '';
+      document.getElementById('preview-date').value = item.date || '';
+      document.getElementById('preview-category').value = item.category || 'News';
+      document.getElementById('preview-tags').value = (item.tags || []).join(', ');
+      document.getElementById('article-preview').hidden = false;
+      document.querySelector('#article-preview button[type="submit"]').textContent = 'Save changes';
+      document.getElementById('article-preview').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    async function deleteArticle(item){
+      if (!confirm(`Delete "${item.title}"?`)) return;
+      const response = await fetch('/api/delete', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url:item.url})});
+      const result = await response.json();
+      if (!response.ok) { alert(result.error || 'Could not delete the article.'); return; }
+      allItems = result.items;
+      renderFilters();
+      render();
+    }
+
+    async function keepToday(){
+      if (!confirm('Delete every article whose date is not today? This cannot be undone.')) return;
+      const response = await fetch('/api/keep-today', {method:'POST'});
+      const result = await response.json();
+      if (!response.ok) { alert(result.error || 'Could not clean up the articles.'); return; }
+      allItems = result.items;
+      renderFilters();
+      render();
     }
 
     function renderFilters(){
@@ -610,7 +689,13 @@
                 <span>${escapeHtml(formatDate(item.date))}</span>
                 <div class="story-tags">${(item.tags || []).map(t => `<span>${escapeHtml(t)}</span>`).join('')}</div>
               </div>
+              <div class="story-actions">
+                <button class="story-action edit-story" type="button">Edit</button>
+                <button class="story-action delete-story" type="button">Delete</button>
+              </div>
             `;
+            art.querySelector('.edit-story').onclick = () => editArticle(item);
+            art.querySelector('.delete-story').onclick = () => deleteArticle(item);
             section.appendChild(art);
           });
 

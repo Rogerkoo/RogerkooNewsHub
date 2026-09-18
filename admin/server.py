@@ -132,7 +132,7 @@ class NewsHandler(SimpleHTTPRequestHandler):
             self.send_header("Set-Cookie", "news_hub_session=; Max-Age=0; Path=/; HttpOnly; SameSite=Strict")
             self.end_headers()
             return
-        if self.path not in ("/api/preview", "/api/add"):
+        if self.path not in ("/api/preview", "/api/add", "/api/update", "/api/delete", "/api/keep-today"):
             self.send_error(404)
             return
         if not ADMIN_PASSWORD:
@@ -148,11 +148,45 @@ class NewsHandler(SimpleHTTPRequestHandler):
                 send_json(self, 200, {"item": fetch_article(payload.get("url", "").strip())})
                 return
 
+            data = read_news()
+            if self.path == "/api/delete":
+                url = payload.get("url", "").strip()
+                previous_length = len(data.get("items", []))
+                data["items"] = [item for item in data.get("items", []) if item.get("url") != url]
+                if len(data["items"]) == previous_length:
+                    raise ValueError("Article not found.")
+                write_news(data)
+                send_json(self, 200, {"items": data["items"]})
+                return
+            if self.path == "/api/keep-today":
+                today = datetime.now(timezone.utc).date().isoformat()
+                data["items"] = [item for item in data.get("items", []) if item.get("addedAt", "").startswith(today)]
+                write_news(data)
+                send_json(self, 200, {"items": data["items"]})
+                return
+
             item = payload.get("item", {})
             url = item.get("url", "").strip()
             if not url:
                 raise ValueError("The article URL is required.")
-            data = read_news()
+            original_url = payload.get("originalUrl", "").strip()
+            if self.path == "/api/update":
+                for index, existing in enumerate(data.get("items", [])):
+                    if existing.get("url") == original_url:
+                        if any(other.get("url") == url and other.get("url") != original_url for other in data["items"]):
+                            raise ValueError("That article URL is already in the dashboard.")
+                        category = item.get("category", "News")
+                        if category not in CATEGORIES:
+                            raise ValueError("Choose one of the available categories.")
+                        tags = [tag.strip().lower() for tag in re.split(r"[,#]", item.get("tags", "")) if tag.strip()]
+                        updated = {"title": item.get("title", "").strip(), "summary": item.get("summary", "").strip(), "url": url, "source": item.get("source", "").strip(), "category": category, "tags": list(dict.fromkeys(tags)), "date": item.get("date", ""), "addedAt": existing.get("addedAt", "")}
+                        if not updated["title"]:
+                            raise ValueError("The article title is required.")
+                        data["items"][index] = updated
+                        write_news(data)
+                        send_json(self, 200, {"item": updated})
+                        return
+                raise ValueError("Article not found.")
             if any(existing.get("url") == url for existing in data.get("items", [])):
                 raise ValueError("That article is already in the dashboard.")
             category = item.get("category", "News")
@@ -167,6 +201,7 @@ class NewsHandler(SimpleHTTPRequestHandler):
                 "category": category,
                 "tags": list(dict.fromkeys(tags)),
                 "date": item.get("date") or datetime.now(timezone.utc).date().isoformat(),
+                "addedAt": datetime.now(timezone.utc).isoformat(),
             }
             if not new_item["title"]:
                 raise ValueError("The article title is required.")

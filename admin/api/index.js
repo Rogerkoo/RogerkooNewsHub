@@ -167,7 +167,7 @@ async function addArticle(item) {
   const newItem = {
     title: String(item.title || '').trim(), summary: String(item.summary || '').trim(),
     url: String(item.url || '').trim(), source: String(item.source || '').trim(),
-    category: item.category || 'News', tags: [...new Set(tags)], date: item.date || new Date().toISOString().slice(0, 10)
+    category: item.category || 'News', tags: [...new Set(tags)], date: item.date || new Date().toISOString().slice(0, 10), addedAt: new Date().toISOString()
   };
   if (!newItem.title || !newItem.url) throw new Error('The article title and URL are required.');
   data.items.push(newItem);
@@ -177,6 +177,46 @@ async function addArticle(item) {
     body: JSON.stringify({ message: `Add article: ${newItem.title}`, content: Buffer.from(`${JSON.stringify(data, null, 2)}\n`).toString('base64'), sha, branch })
   });
   return newItem;
+}
+
+async function commitNews(data, message, sha) {
+  const { repo, branch } = githubConfig();
+  await githubRequest(`${repo}/contents/news.json`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, content: Buffer.from(`${JSON.stringify(data, null, 2)}\n`).toString('base64'), sha, branch })
+  });
+}
+
+async function updateArticle(item, originalUrl) {
+  const { data, sha } = await readNews();
+  const index = data.items.findIndex(existing => existing.url === originalUrl);
+  if (index < 0) throw new Error('Article not found.');
+  if (data.items.some((existing, position) => position !== index && existing.url === item.url)) throw new Error('That article URL is already in the dashboard.');
+  if (!categories.includes(item.category)) throw new Error('Choose one of the available categories.');
+  const tags = String(item.tags || '').split(/[,#]/).map(tag => tag.trim().toLowerCase()).filter(Boolean);
+  const updated = { title: String(item.title || '').trim(), summary: String(item.summary || '').trim(), url: String(item.url || '').trim(), source: String(item.source || '').trim(), category: item.category, tags: [...new Set(tags)], date: item.date || '', addedAt: data.items[index].addedAt || '' };
+  if (!updated.title || !updated.url) throw new Error('The article title and URL are required.');
+  data.items[index] = updated;
+  await commitNews(data, `Update article: ${updated.title}`, sha);
+  return updated;
+}
+
+async function deleteArticle(url) {
+  const { data, sha } = await readNews();
+  const previousLength = data.items.length;
+  data.items = data.items.filter(item => item.url !== url);
+  if (data.items.length === previousLength) throw new Error('Article not found.');
+  await commitNews(data, 'Delete article', sha);
+  return data.items;
+}
+
+async function keepToday() {
+  const { data, sha } = await readNews();
+  const today = new Date().toISOString().slice(0, 10);
+  data.items = data.items.filter(item => String(item.addedAt || '').startsWith(today));
+  await commitNews(data, `Keep articles from ${today}`, sha);
+  return data.items;
 }
 
 module.exports = async (req, res) => {
@@ -205,11 +245,14 @@ module.exports = async (req, res) => {
       if (!requireAuthenticated(req, res)) return;
       return json(res, 200, (await readNews()).data);
     }
-    if (!['/api/preview', '/api/add'].includes(route) || req.method !== 'POST') return json(res, 404, { error: 'Not found.' });
+    if (!['/api/preview', '/api/add', '/api/update', '/api/delete', '/api/keep-today'].includes(route) || req.method !== 'POST') return json(res, 404, { error: 'Not found.' });
     if (!requireAuthenticated(req, res)) return;
     const body = await requestBody(req);
     if (route === '/api/preview') return json(res, 200, { item: await fetchArticle(String(body.url || '').trim()) });
-    return json(res, 200, { item: await addArticle(body.item || {}) });
+    if (route === '/api/add') return json(res, 200, { item: await addArticle(body.item || {}) });
+    if (route === '/api/update') return json(res, 200, { item: await updateArticle(body.item || {}, String(body.originalUrl || '').trim()) });
+    if (route === '/api/delete') return json(res, 200, { items: await deleteArticle(String(body.url || '').trim()) });
+    return json(res, 200, { items: await keepToday() });
   } catch (error) {
     return json(res, 400, { error: error.message || 'Request failed.' });
   }
