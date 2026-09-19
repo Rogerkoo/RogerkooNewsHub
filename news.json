@@ -78,6 +78,19 @@
       ],
       "date": "2026-09-08",
       "addedAt": "2026-09-18T14:07:22.578Z"
+    },
+    {
+      "title": "Pudu Programming Language",
+      "summary": "Pudu is a statically typed, expression-oriented programming language that I’m designing for building...",
+      "url": "https://dev.to/chrismichaelps/pudu-programming-language-42h5",
+      "source": "DEV Community",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering"
+      ],
+      "date": "2026-09-19",
+      "addedAt": "2026-09-19T03:57:47.581Z"
     }
   ]
 }
