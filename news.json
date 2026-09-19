@@ -104,6 +104,19 @@
       ],
       "date": "2026-09-15",
       "addedAt": "2026-09-19T10:46:05.762Z"
+    },
+    {
+      "title": "Before Your .NET API Goes to Production, Check These 8 Things",
+      "summary": "Your API working locally is only the beginning. These small decisions make production debugging, maintenance, and future changes much easier..",
+      "url": "https://mwaseemzakir.substack.com/p/before-your-net-api-goes-to-production?via=dailydev",
+      "source": "mwaseemzakir.substack.com",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering"
+      ],
+      "date": "2026-09-19",
+      "addedAt": "2026-09-19T10:47:41.509Z"
     }
   ]
 }
