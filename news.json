@@ -117,6 +117,16 @@
       ],
       "date": "2026-09-19",
       "addedAt": "2026-09-19T10:47:41.509Z"
+    },
+    {
+      "title": "Authorization Terminology is a Mess: Let’s Fix It | daily.dev",
+      "summary": "Authorization terminology like RBAC, ABAC, MAC, DAC, ACL, ReBAC, and PBAC is proposed to be reorganized into six independent axes: who administers rules, what...",
+      "url": "https://dly.to/bzAe2JvnBST",
+      "source": "daily.dev",
+      "category": "IT / Software Engineering",
+      "tags": [],
+      "date": "2026-09-19",
+      "addedAt": "2026-09-19T11:13:39.836Z"
     }
   ]
 }
