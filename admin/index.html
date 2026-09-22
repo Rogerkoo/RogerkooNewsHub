@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rogerkoo's News Hub</title>
@@ -8,318 +9,509 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --ink:#14181F;
-      --paper:#F7F5F0;
-      --amber:#E8A33D;
-      --slate:#5B6472;
-      --line:#DEDAD1;
+    :root {
+      --ink: #14181F;
+      --paper: #F7F5F0;
+      --amber: #E8A33D;
+      --slate: #5B6472;
+      --line: #DEDAD1;
     }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      background:var(--paper);
-      color:var(--ink);
-      font-family:'Inter',-apple-system,sans-serif;
-      line-height:1.5;
+
+    * {
+      box-sizing: border-box;
     }
-    header{
-      padding:56px 24px 32px;
-      max-width:760px;
-      margin:0 auto;
-      border-bottom:1px solid var(--line);
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, sans-serif;
+      line-height: 1.5;
     }
-    .masthead{
-      font-family:'Fraunces',serif;
-      font-weight:600;
-      font-size:clamp(2.4rem,6vw,3.2rem);
-      letter-spacing:-0.02em;
-      margin:0;
-      display:flex;
-      align-items:baseline;
-      gap:10px;
+
+    header {
+      padding: 56px 24px 32px;
+      max-width: 1040px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--line);
     }
-    .masthead .dot{
-      width:10px;height:10px;border-radius:50%;
-      background:var(--amber);
-      display:inline-block;
-      transform:translateY(-6px);
+
+    .masthead {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: clamp(2.4rem, 6vw, 3.2rem);
+      letter-spacing: -0.02em;
+      margin: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
     }
-    .tagline{
-      color:var(--slate);
-      font-size:1.05rem;
-      margin:10px 0 0;
+
+    .masthead .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--amber);
+      display: inline-block;
+      transform: translateY(-6px);
     }
-    .header-actions{
-      margin-top:16px;
+
+    .tagline {
+      color: var(--slate);
+      font-size: 1.05rem;
+      margin: 10px 0 0;
     }
-    .logout-button{
-      padding:8px 14px;
-      border:1px solid var(--line);
-      border-radius:6px;
-      background:transparent;
-      color:var(--slate);
-      cursor:pointer;
-      font:500 0.85rem 'Inter',sans-serif;
+
+    .header-actions {
+      margin-top: 16px;
     }
-    .logout-button:hover{
-      border-color:var(--slate);
-      color:var(--ink);
+
+    .logout-button {
+      padding: 8px 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--slate);
+      cursor: pointer;
+      font: 500 0.85rem 'Inter', sans-serif;
     }
-    .admin-login{
-      max-width:760px;
-      margin:24px auto 0;
-      padding:0 24px;
+
+    .logout-button:hover {
+      border-color: var(--slate);
+      color: var(--ink);
     }
-    .admin-login form{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
+
+    .admin-login {
+      max-width: 1040px;
+      margin: 24px auto 0;
+      padding: 0 24px;
     }
-    .admin-login input{
-      flex:0 1 380px;
-      width:100%;
-      min-width:0;
+
+    .admin-login form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
-    .admin-login .action-button{
-      padding:12px 24px;
-      flex:0 0 auto;
+
+    .admin-login input {
+      flex: 0 1 380px;
+      width: 100%;
+      min-width: 0;
     }
-    .admin-login .status{
-      flex:1 1 100%;
+
+    .admin-login .action-button {
+      padding: 12px 24px;
+      flex: 0 0 auto;
     }
-    @media (max-width:520px){
-      .admin-login input,.admin-login .action-button{
-        flex-basis:100%;
+
+    .admin-login .status {
+      flex: 1 1 100%;
+    }
+
+    @media (max-width:520px) {
+
+      .admin-login input,
+      .admin-login .action-button {
+        flex-basis: 100%;
       }
     }
-    .admin-login[hidden],.add-panel[hidden],.dashboard[hidden]{ display:none; }
-    .add-panel{
-      max-width:760px;
-      margin:24px auto 0;
-      padding:0 24px;
+
+    .admin-login[hidden],
+    .add-panel[hidden],
+    .dashboard[hidden] {
+      display: none;
     }
-    .add-panel h2{
-      font-family:'Fraunces',serif;
-      font-size:1.3rem;
-      font-weight:500;
-      margin:0 0 12px;
+
+    .add-panel {
+      max-width: 1040px;
+      margin: 24px auto 0;
+      padding: 0 24px;
     }
-    .add-form{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
+
+    .add-panel h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin: 0 0 12px;
     }
-    .edit-form{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
+
+    .add-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .url-input,.field-input,.category-select{
-      min-width:0;
-      padding:10px 12px;
-      border:1px solid var(--line);
-      border-radius:6px;
-      background:rgba(255,255,255,0.45);
-      color:var(--ink);
-      font:inherit;
+
+    .edit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .url-input{ flex:1 1 300px; }
-    .field-input,.category-select{ width:100%; }
-    .url-input:focus,.field-input:focus,.category-select:focus{
-      outline:2px solid var(--amber);
-      outline-offset:1px;
+
+    .url-input,
+    .field-input,
+    .category-select {
+      min-width: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.45);
+      color: var(--ink);
+      font: inherit;
     }
-    .action-button{
-      padding:10px 16px;
-      border:1px solid var(--ink);
-      border-radius:6px;
-      background:var(--ink);
-      color:var(--paper);
-      cursor:pointer;
-      font:600 0.9rem 'Inter',sans-serif;
+
+    .url-input {
+      flex: 1 1 300px;
     }
-    .action-button:disabled{ opacity:0.55; cursor:wait; }
-    .status{
-      flex:1 1 100%;
-      color:var(--slate);
-      font-size:0.85rem;
-      min-height:1.3em;
-      margin:2px 0 0;
+
+    .field-input,
+    .category-select {
+      width: 100%;
     }
-    .status.error{ color:#a43f35; }
-    .article-preview{ margin-top:14px; }
-    .article-preview[hidden]{ display:none; }
-    .preview-label{
-      flex:1 1 100%;
-      color:var(--slate);
-      font-size:0.8rem;
-      margin:0;
+
+    .url-input:focus,
+    .field-input:focus,
+    .category-select:focus {
+      outline: 2px solid var(--amber);
+      outline-offset: 1px;
     }
-    .edit-form .field-input[readonly]{ color:var(--slate); }
-    .edit-form .action-button{ align-self:flex-start; }
-    .management-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin:0 0 16px;
+
+    .action-button {
+      padding: 10px 16px;
+      border: 1px solid var(--ink);
+      border-radius: 6px;
+      background: var(--ink);
+      color: var(--paper);
+      cursor: pointer;
+      font: 600 0.9rem 'Inter', sans-serif;
     }
-    .danger-button{
-      padding:8px 12px;
-      border:1px solid #a43f35;
-      border-radius:6px;
-      background:transparent;
-      color:#a43f35;
-      cursor:pointer;
-      font:600 0.8rem 'Inter',sans-serif;
+
+    .action-button:disabled {
+      opacity: 0.55;
+      cursor: wait;
     }
-    .danger-button:hover{ background:#a43f35; color:var(--paper); }
-    .story-actions{ display:flex; gap:8px; margin-top:12px; }
-    .story-action{
-      padding:5px 10px;
-      border:1px solid var(--line);
-      border-radius:5px;
-      background:transparent;
-      color:var(--slate);
-      cursor:pointer;
-      font:500 0.75rem 'Inter',sans-serif;
+
+    .status {
+      flex: 1 1 100%;
+      color: var(--slate);
+      font-size: 0.85rem;
+      min-height: 1.3em;
+      margin: 2px 0 0;
     }
-    .story-action:hover{ border-color:var(--ink); color:var(--ink); }
-    .field-group{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
+
+    .status.error {
+      color: #a43f35;
     }
-    .field-label{
-      color:var(--slate);
-      font-size:0.78rem;
-      font-weight:600;
+
+    .article-preview {
+      margin-top: 14px;
     }
-    .filters{
-      max-width:760px;
-      margin:22px auto 0;
-      padding:0 24px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
+
+    .article-preview[hidden] {
+      display: none;
     }
-    .search-wrap{
-      position:relative;
-      flex:1 1 100%;
+
+    .preview-label {
+      flex: 1 1 100%;
+      color: var(--slate);
+      font-size: 0.8rem;
+      margin: 0;
     }
-    .search-input{
-      width:100%;
-      padding:11px 14px 11px 40px;
-      border:1px solid var(--line);
-      border-radius:6px;
-      background:rgba(255,255,255,0.45);
-      color:var(--ink);
-      font:inherit;
-      font-size:0.95rem;
+
+    .edit-form .field-input[readonly] {
+      color: var(--slate);
     }
-    .search-input:focus{
-      outline:2px solid var(--amber);
-      outline-offset:1px;
+
+    .edit-form .action-button {
+      align-self: flex-start;
     }
-    .search-icon{
-      position:absolute;
-      left:14px;
-      top:50%;
-      color:var(--slate);
-      pointer-events:none;
-      transform:translateY(-50%);
+
+    .management-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 16px;
     }
-    .chip{
-      font-size:0.85rem;
-      padding:6px 14px;
-      border:1px solid var(--line);
-      border-radius:20px;
-      background:transparent;
-      color:var(--slate);
-      cursor:pointer;
-      font-family:'Inter',sans-serif;
-      transition:border-color .15s ease, color .15s ease, background .15s ease;
+
+    .danger-button {
+      padding: 8px 12px;
+      border: 1px solid #a43f35;
+      border-radius: 6px;
+      background: transparent;
+      color: #a43f35;
+      cursor: pointer;
+      font: 600 0.8rem 'Inter', sans-serif;
     }
-    .chip:hover{ border-color:var(--slate); color:var(--ink); }
-    .chip.active{
-      background:var(--ink);
-      border-color:var(--ink);
-      color:var(--paper);
+
+    .danger-button:hover {
+      background: #a43f35;
+      color: var(--paper);
     }
-    main{
-      max-width:760px;
-      margin:0 auto;
-      padding:40px 24px 80px;
+
+    .story-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
     }
-    section.category{
-      margin-bottom:48px;
+
+    .story-action {
+      padding: 5px 10px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: transparent;
+      color: var(--slate);
+      cursor: pointer;
+      font: 500 0.75rem 'Inter', sans-serif;
     }
-    section.category.hidden{ display:none; }
-    .category-label{
-      font-family:'Fraunces',serif;
-      font-size:1.3rem;
-      font-weight:500;
-      margin:0 0 4px;
+
+    .story-action:hover {
+      border-color: var(--ink);
+      color: var(--ink);
     }
-    .category-count{
-      color:var(--slate);
-      font-size:0.85rem;
-      margin:0 0 18px;
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    article.story{
-      padding:18px 0;
-      border-top:1px solid var(--line);
+
+    .field-label {
+      color: var(--slate);
+      font-size: 0.78rem;
+      font-weight: 600;
     }
-    article.story.hidden{ display:none; }
-    article.story a.title-link{
-      color:var(--ink);
-      text-decoration:none;
-      font-weight:600;
-      font-size:1.08rem;
-      display:block;
-      margin-bottom:6px;
+
+    .search-wrap {
+      position: relative;
+      flex: 1 1 100%;
     }
-    article.story a.title-link:hover{ color:var(--amber); }
-    .summary{
-      color:var(--slate);
-      font-size:0.96rem;
-      margin:0 0 10px;
-      max-width:66ch;
+
+    .search-input {
+      width: 100%;
+      padding: 11px 14px 11px 40px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.45);
+      color: var(--ink);
+      font: inherit;
+      font-size: 0.95rem;
     }
-    .meta{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:0.8rem;
-      color:var(--slate);
+
+    .search-input:focus {
+      outline: 2px solid var(--amber);
+      outline-offset: 1px;
     }
-    .story-tags{
-      display:flex;
-      gap:6px;
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      color: var(--slate);
+      pointer-events: none;
+      transform: translateY(-50%);
     }
-    .story-tags span{
-      background:rgba(232,163,61,0.15);
-      color:#8a5c17;
-      padding:2px 9px;
-      border-radius:12px;
-      font-size:0.75rem;
+
+    .chip {
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: transparent;
+      color: var(--slate);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: border-color .15s ease, color .15s ease, background .15s ease;
     }
-    .empty-state{
-      color:var(--slate);
-      font-size:0.95rem;
-      padding:40px 0;
+
+    .chip:hover {
+      border-color: var(--slate);
+      color: var(--ink);
     }
-    footer{
-      max-width:760px;
-      margin:0 auto;
-      padding:0 24px 60px;
-      color:var(--slate);
-      font-size:0.8rem;
+
+    .chip.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+
+    .page-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .left-menu {
+      width: 220px;
+      flex-shrink: 0;
+      position: sticky;
+      /* Keeps the menu in view as the user scrolls */
+      top: 20px;
+      /* Distance from the top of the viewport */
+      padding: 22px 0 0;
+    }
+
+    .menu-label {
+      font-family: 'Fraunces', serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--slate);
+      margin: 0 0 10px;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--slate);
+      cursor: pointer;
+      font: 500 0.92rem 'Inter', sans-serif;
+      text-align: left;
+    }
+
+    .menu-item:hover {
+      background: rgba(20, 24, 31, 0.05);
+      color: var(--ink);
+    }
+
+    .menu-item.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .menu-item .menu-count {
+      font-size: 0.78rem;
+      opacity: 0.75;
+    }
+
+    .content-column {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .filters {
+      margin: 22px 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    main {
+      padding: 40px 0 80px;
+    }
+
+    @media (max-width: 720px) {
+      .page-container { flex-direction: column; }
+      .left-menu {
+        position: static;
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 6px;
+        padding: 16px 0 4px;
+      }
+      .menu-label { display: none; }
+      .menu-item { flex-shrink: 0; width: auto; white-space: nowrap; }
+    }
+
+    section.category {
+      margin-bottom: 48px;
+    }
+
+    section.category.hidden {
+      display: none;
+    }
+
+    .category-label {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin: 0 0 4px;
+    }
+
+    .category-count {
+      color: var(--slate);
+      font-size: 0.85rem;
+      margin: 0 0 18px;
+    }
+
+    article.story {
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    article.story.hidden {
+      display: none;
+    }
+
+    article.story a.title-link {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.08rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    article.story a.title-link:hover {
+      color: var(--amber);
+    }
+
+    .summary {
+      color: var(--slate);
+      font-size: 0.96rem;
+      margin: 0 0 10px;
+      max-width: 66ch;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--slate);
+    }
+
+    .story-tags {
+      display: flex;
+      gap: 6px;
+    }
+
+    .story-tags span {
+      background: rgba(232, 163, 61, 0.15);
+      color: #8a5c17;
+      padding: 2px 9px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+
+    .empty-state {
+      color: var(--slate);
+      font-size: 0.95rem;
+      padding: 40px 0;
+    }
+
+    footer {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 24px 60px 0px;
+      color: var(--slate);
+      font-size: 0.8rem;
     }
   </style>
-  </head>
-  <body>
+</head>
+
+<body>
 
   <header>
     <h1 class="masthead">Rogerkoo's News Hub</h1>
@@ -332,7 +524,8 @@
   <section class="admin-login" id="admin-login" aria-labelledby="login-heading">
     <h2 id="login-heading">Admin sign in</h2>
     <form id="login-form">
-      <input class="url-input" id="admin-password" type="password" placeholder="Admin password" aria-label="Admin password" required>
+      <input class="url-input" id="admin-password" type="password" placeholder="Admin password"
+        aria-label="Admin password" required>
       <button class="action-button" type="submit">Sign in</button>
       <p class="status" id="login-status" aria-live="polite"></p>
     </form>
@@ -344,7 +537,8 @@
       <button class="danger-button" type="button" id="keep-today-button">Delete all except added today</button>
     </div>
     <form class="add-form" id="add-form">
-      <input class="url-input" id="article-url" type="url" placeholder="Paste an article URL" aria-label="Article URL" required>
+      <input class="url-input" id="article-url" type="url" placeholder="Paste an article URL" aria-label="Article URL"
+        required>
       <button class="action-button" type="submit">Fetch article</button>
       <p class="status" id="add-status" aria-live="polite"></p>
     </form>
@@ -378,22 +572,28 @@
     </form>
   </section>
 
-  <div class="filters dashboard" id="filters" hidden></div>
+  <div class="page-container">
+    <nav class="left-menu dashboard" id="sidebar" hidden></nav>
+    <div class="content-column">
+      <div class="filters dashboard" id="filters" hidden></div>
+      <main class="dashboard" id="main" hidden>
+        <p class="empty-state">Sign in to load your news dashboard.</p>
+      </main>
+      <footer>Curated by Roger.</footer>
+    </div>
+  </div>
 
-  <main class="dashboard" id="main" hidden>
-    <p class="empty-state">Sign in to load your news dashboard.</p>
-  </main>
-
-  <footer>Curated by Roger.</footer>
+  
 
   <script>
     let allItems = [];
     let activeTag = null;
+    let activeCategory = null;
     let searchQuery = '';
     let pendingItem = null;
     let editMode = false;
     let originalUrl = '';
-    const categories = ['News', 'News - Malaysia', 'IT / Software Engineering', 'Business', 'Cars', 'AI', 'Science', 'Lifestyle', 'Sports', 'Technology', 'Entertainment'];
+    const categories = ['AI', 'Business', 'Cars', 'Christianity', 'Entertainment', 'Fintech', 'IT / Software Engineering', 'Lifestyle', 'News', 'News - Malaysia', 'Science', 'Sports', 'Technology'];
 
     document.getElementById('login-form').addEventListener('submit', login);
     document.getElementById('logout-button').addEventListener('click', logout);
@@ -403,10 +603,10 @@
     document.getElementById('preview-category').innerHTML = categories.map(category => `<option>${escapeHtml(category)}</option>`).join('');
     checkSession();
 
-    async function checkSession(){
+    async function checkSession() {
       try {
         const response = await fetch('/api/session');
-        const result = await response.json();
+        const result = await readApiResponse(response);
         if (!result.configured) {
           document.getElementById('main').hidden = false;
           document.getElementById('main').innerHTML =
@@ -422,27 +622,28 @@
       }
     }
 
-    async function loadNews(){
+    async function loadNews() {
       const response = await fetch('/api/news');
-      const data = await response.json();
+      const data = await readApiResponse(response);
       if (!response.ok) throw new Error(data.error || 'Could not load news from API.');
       document.title = data.dashboardTitle || "Rogerkoo's News Hub";
       document.querySelector('.masthead').firstChild.textContent = data.dashboardTitle || "Rogerkoo's News Hub";
       document.getElementById('tagline').textContent = data.dashboardTagline || '';
       allItems = data.items || [];
+      renderSidebar();
       renderFilters();
       render();
     }
 
-    async function login(event){
+    async function login(event) {
       event.preventDefault();
       const status = document.getElementById('login-status');
       try {
         const response = await fetch('/api/login', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({password:document.getElementById('admin-password').value})
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: document.getElementById('admin-password').value })
         });
-        const result = await response.json();
+        const result = await readApiResponse(response);
         if (!response.ok) throw new Error(result.error || 'Sign in failed.');
         document.getElementById('login-form').reset();
         status.textContent = '';
@@ -458,8 +659,16 @@
       }
     }
 
-    async function logout(){
-      await fetch('/api/logout', { method:'POST' });
+    async function readApiResponse(response) {
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        throw new Error(`Admin API returned ${response.status} ${response.statusText || 'an unexpected response'}. Check the Vercel API rewrite.`);
+      }
+      return response.json();
+    }
+
+    async function logout() {
+      await fetch('/api/logout', { method: 'POST' });
       allItems = [];
       activeTag = null;
       searchQuery = '';
@@ -468,19 +677,21 @@
       document.getElementById('article-preview').hidden = true;
       document.getElementById('add-status').textContent = '';
       setAdminState(false);
+      document.getElementById('sidebar').innerHTML = '';
       document.getElementById('filters').innerHTML = '';
       document.getElementById('main').innerHTML = '<p class="empty-state">Sign in to load your news dashboard.</p>';
     }
 
-    function setAdminState(authenticated){
+    function setAdminState(authenticated) {
       document.getElementById('admin-login').hidden = authenticated;
       document.getElementById('add-panel').hidden = !authenticated;
       document.getElementById('header-actions').hidden = !authenticated;
+      document.getElementById('sidebar').hidden = !authenticated;
       document.getElementById('filters').hidden = !authenticated;
       document.getElementById('main').hidden = !authenticated;
     }
 
-    async function fetchArticle(event){
+    async function fetchArticle(event) {
       event.preventDefault();
       const status = document.getElementById('add-status');
       const button = event.target.querySelector('button');
@@ -489,9 +700,9 @@
       button.disabled = true;
       try {
         const response = await fetch('/api/preview', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({url:document.getElementById('article-url').value})
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: document.getElementById('article-url').value })
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Could not fetch that article.');
@@ -515,7 +726,7 @@
       }
     }
 
-    async function addArticle(event){
+    async function addArticle(event) {
       event.preventDefault();
       const status = document.getElementById('add-status');
       const button = event.target.querySelector('button');
@@ -534,9 +745,9 @@
       try {
         const wasEditing = editMode;
         const response = await fetch(editMode ? '/api/update' : '/api/add', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(editMode ? {item, originalUrl} : {item})
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(editMode ? { item, originalUrl } : { item })
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || 'Could not save the article.');
@@ -546,6 +757,7 @@
         } else {
           allItems.push(result.item);
         }
+        renderSidebar();
         renderFilters();
         render();
         document.getElementById('add-form').reset();
@@ -562,7 +774,7 @@
       }
     }
 
-    function editArticle(item){
+    function editArticle(item) {
       pendingItem = item;
       editMode = true;
       originalUrl = item.url;
@@ -574,31 +786,105 @@
       document.getElementById('preview-tags').value = (item.tags || []).join(', ');
       document.getElementById('article-preview').hidden = false;
       document.querySelector('#article-preview button[type="submit"]').textContent = 'Save changes';
-      document.getElementById('article-preview').scrollIntoView({behavior:'smooth', block:'start'});
+      document.getElementById('article-preview').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    async function deleteArticle(item){
+    async function deleteArticle(item) {
       if (!confirm(`Delete "${item.title}"?`)) return;
-      const response = await fetch('/api/delete', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url:item.url})});
+      const response = await fetch('/api/delete', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: item.url }) });
       const result = await response.json();
       if (!response.ok) { alert(result.error || 'Could not delete the article.'); return; }
       allItems = result.items;
+      renderSidebar();
       renderFilters();
       render();
     }
 
-    async function keepToday(){
+    async function keepToday() {
       if (!confirm('Delete every article whose date is not today? This cannot be undone.')) return;
-      const response = await fetch('/api/keep-today', {method:'POST'});
+      const response = await fetch('/api/keep-today', { method: 'POST' });
       const result = await response.json();
       if (!response.ok) { alert(result.error || 'Could not clean up the articles.'); return; }
       allItems = result.items;
+      renderSidebar();
       renderFilters();
       render();
     }
 
-    function renderFilters(){
-      const tags = [...new Set(allItems.flatMap(i => i.tags || []))].sort();
+    function renderSidebar() {
+      const sidebarEl = document.getElementById('sidebar');
+      sidebarEl.innerHTML = '';
+
+      const label = document.createElement('p');
+      label.className = 'menu-label';
+      label.textContent = 'Categories';
+      sidebarEl.appendChild(label);
+
+      const itemCategories = [...new Set(allItems.map(i => i.category))].sort();
+      // Include every category from the add-article dropdown too, even ones with 0 articles yet.
+      const allCategories = [...new Set([...categories, ...itemCategories])].sort();
+
+      const makeItem = (name, value) => {
+        const btn = document.createElement('button');
+        btn.className = 'menu-item';
+        btn.innerHTML = `<span>${escapeHtml(name)}</span><span class="menu-count">0</span>`;
+        btn.onclick = () => {
+          activeCategory = value;
+          const relevantTags = new Set(
+            (value ? allItems.filter(i => i.category === value) : allItems)
+              .flatMap(i => i.tags || [])
+          );
+          if (activeTag && !relevantTags.has(activeTag)) activeTag = null;
+          renderSidebar();
+          renderFilters();
+          render();
+        };
+        return btn;
+      };
+
+      sidebarEl.appendChild(makeItem('All', null));
+      allCategories.forEach(cat => {
+        sidebarEl.appendChild(makeItem(cat, cat));
+      });
+
+      updateSidebar();
+      updateSidebarCounts();
+    }
+
+    function updateSidebar() {
+      document.querySelectorAll('.menu-item').forEach(item => {
+        const name = item.querySelector('span').textContent;
+        const isAll = name === 'All';
+        item.classList.toggle('active', activeCategory === null ? isAll : name === activeCategory);
+      });
+    }
+
+    function updateSidebarCounts() {
+      const matchesSearch = item => {
+        if (!searchQuery) return true;
+        const searchableText = [
+          item.title,
+          item.summary,
+          item.source,
+          item.category,
+          ...(item.tags || [])
+        ].join(' ').toLowerCase();
+        return searchableText.includes(searchQuery);
+      };
+
+      document.querySelectorAll('.menu-item').forEach(item => {
+        const name = item.querySelector('span').textContent;
+        const value = name === 'All' ? null : name;
+        const itemsInCat = value ? allItems.filter(i => i.category === value) : allItems;
+        const tagFiltered = activeTag ? itemsInCat.filter(i => (i.tags || []).includes(activeTag)) : itemsInCat;
+        const count = tagFiltered.filter(matchesSearch).length;
+        item.querySelector('.menu-count').textContent = count;
+      });
+    }
+
+    function renderFilters() {
+      const relevantItems = activeCategory ? allItems.filter(i => i.category === activeCategory) : allItems;
+      const tags = [...new Set(relevantItems.flatMap(i => i.tags || []))].sort();
       const filtersEl = document.getElementById('filters');
       filtersEl.innerHTML = '';
 
@@ -628,21 +914,24 @@
       });
     }
 
-    function updateChips(){
+    function updateChips() {
       document.querySelectorAll('.chip').forEach(chip => {
         const isAll = chip.textContent === 'All';
         chip.classList.toggle('active', activeTag === null ? isAll : chip.textContent === activeTag);
       });
     }
 
-    function render(){
+    function render() {
+      updateSidebarCounts();
       const main = document.getElementById('main');
       main.innerHTML = '';
 
-      const categories = [...new Set(allItems.map(i => i.category))];
+      const renderedCategories = activeCategory
+        ? [activeCategory]
+        : [...new Set(allItems.map(i => i.category))];
       let anyVisible = false;
 
-      categories.forEach(cat => {
+      renderedCategories.forEach(cat => {
         const itemsInCat = allItems.filter(i => i.category === cat);
         const visibleItems = activeTag
           ? itemsInCat.filter(i => (i.tags || []).includes(activeTag))
@@ -702,18 +991,18 @@
         main.appendChild(section);
       });
 
-      if (!anyVisible){
+      if (!anyVisible) {
         main.innerHTML = `<p class="empty-state">No stories match ${searchQuery ? 'your search' : 'this tag'} yet.</p>`;
       }
     }
 
-    function formatDate(dateStr){
+    function formatDate(dateStr) {
       if (!dateStr) return '';
       const d = new Date(dateStr);
       return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
-    function escapeHtml(value){
+    function escapeHtml(value) {
       return String(value)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -726,5 +1015,6 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/<unique-path>/script.js"></script>
-  </body>
+</body>
+
 </html>

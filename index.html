@@ -25,7 +25,7 @@
     }
     header{
       padding:56px 24px 32px;
-      max-width:760px;
+      max-width:1040px;
       margin:0 auto;
       border-bottom:1px solid var(--line);
     }
@@ -50,13 +50,76 @@
       font-size:1.05rem;
       margin:10px 0 0;
     }
-    .filters{
-      max-width:760px;
-      margin:22px auto 0;
+    .page-container{
+      max-width:1040px;
+      margin:0 auto;
       padding:0 24px;
+      display:flex;
+      align-items:flex-start;
+      gap:32px;
+    }
+    .left-menu{
+      width:220px;
+      flex-shrink:0;
+      position:sticky;
+      top:20px;
+      padding:22px 0 0;
+    }
+    .menu-label{
+      font-family:'Fraunces',serif;
+      font-size:0.95rem;
+      font-weight:500;
+      color:var(--slate);
+      margin:0 0 10px;
+    }
+    .menu-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      width:100%;
+      padding:8px 10px;
+      border:none;
+      border-radius:6px;
+      background:transparent;
+      color:var(--slate);
+      cursor:pointer;
+      font:500 0.92rem 'Inter',sans-serif;
+      text-align:left;
+    }
+    .menu-item:hover{ background:rgba(20,24,31,0.05); color:var(--ink); }
+    .menu-item.active{
+      background:var(--ink);
+      color:var(--paper);
+    }
+    .menu-item .menu-count{
+      font-size:0.78rem;
+      opacity:0.75;
+    }
+    .content-column{
+      flex:1;
+      min-width:0;
+    }
+    .filters{
+      margin:22px 0 0;
+      padding:0;
       display:flex;
       flex-wrap:wrap;
       gap:8px;
+    }
+    @media (max-width:720px){
+      .page-container{ flex-direction:column; }
+      .left-menu{
+        position:static;
+        width:100%;
+        display:flex;
+        flex-wrap:nowrap;
+        overflow-x:auto;
+        gap:6px;
+        padding:16px 0 4px;
+      }
+      .menu-label{ display:none; }
+      .menu-item{ flex-shrink:0; width:auto; white-space:nowrap; }
     }
     .search-wrap{
       position:relative;
@@ -102,9 +165,7 @@
       color:var(--paper);
     }
     main{
-      max-width:760px;
-      margin:0 auto;
-      padding:40px 24px 80px;
+      padding:40px 0 80px;
     }
     section.category{
       margin-bottom:48px;
@@ -165,9 +226,9 @@
       padding:40px 0;
     }
     footer{
-      max-width:760px;
+      max-width:1040px;
       margin:0 auto;
-      padding:0 24px 60px;
+      padding:0 24px 60px 0px;
       color:var(--slate);
       font-size:0.8rem;
     }
@@ -180,17 +241,23 @@
     <p class="tagline" id="tagline">Loading&hellip;</p>
   </header>
 
-  <div class="filters" id="filters"></div>
+  <div class="page-container">
+    <nav class="left-menu" id="sidebar"></nav>
+    <div class="content-column">
+      <div class="filters" id="filters"></div>
+      <main id="main">
+        <p class="empty-state">Loading news&hellip;</p>
+      </main>
+      <footer>Curated by Roger.</footer>
+    </div>
+  </div>
 
-  <main id="main">
-    <p class="empty-state">Loading news&hellip;</p>
-  </main>
-
-  <footer>Curated by Roger.</footer>
+  
 
   <script>
     let allItems = [];
     let activeTag = null;
+    let activeCategory = null;
     let searchQuery = '';
 
     fetch(`news.json?v=${Date.now()}`, { cache:'no-store' })
@@ -200,6 +267,7 @@
         document.querySelector('.masthead').firstChild.textContent = data.dashboardTitle || "Rogerkoo's News Hub";
         document.getElementById('tagline').textContent = data.dashboardTagline || '';
         allItems = data.items || [];
+        renderSidebar();
         renderFilters();
         render();
       })
@@ -208,8 +276,78 @@
           '<p class="empty-state">Could not load news.json. If you are opening this file directly, run a local server (e.g. <code>python3 -m http.server</code>) or host it on GitHub Pages — browsers block local file reads for security.</p>';
       });
 
+    function renderSidebar(){
+      const sidebarEl = document.getElementById('sidebar');
+      sidebarEl.innerHTML = '';
+
+      const label = document.createElement('p');
+      label.className = 'menu-label';
+      label.textContent = 'Categories';
+      sidebarEl.appendChild(label);
+
+      const categories = [...new Set(allItems.map(i => i.category))].sort();
+
+      const makeItem = (name, value) => {
+        const btn = document.createElement('button');
+        btn.className = 'menu-item';
+        btn.innerHTML = `<span>${name}</span><span class="menu-count">0</span>`;
+        btn.onclick = () => {
+          activeCategory = value;
+          const relevantTags = new Set(
+            (value ? allItems.filter(i => i.category === value) : allItems)
+              .flatMap(i => i.tags || [])
+          );
+          if (activeTag && !relevantTags.has(activeTag)) activeTag = null;
+          renderSidebar();
+          renderFilters();
+          render();
+        };
+        return btn;
+      };
+
+      sidebarEl.appendChild(makeItem('All', null));
+      categories.forEach(cat => {
+        sidebarEl.appendChild(makeItem(cat, cat));
+      });
+
+      updateSidebar();
+      updateSidebarCounts();
+    }
+
+    function updateSidebar(){
+      document.querySelectorAll('.menu-item').forEach(item => {
+        const name = item.querySelector('span').textContent;
+        const isAll = name === 'All';
+        item.classList.toggle('active', activeCategory === null ? isAll : name === activeCategory);
+      });
+    }
+
+    function updateSidebarCounts(){
+      const matchesSearch = item => {
+        if (!searchQuery) return true;
+        const searchableText = [
+          item.title,
+          item.summary,
+          item.source,
+          item.category,
+          ...(item.tags || [])
+        ].join(' ').toLowerCase();
+        return searchableText.includes(searchQuery);
+      };
+
+      document.querySelectorAll('.menu-item').forEach(item => {
+        const name = item.querySelector('span').textContent;
+        const value = name === 'All' ? null : name;
+        const itemsInCat = value ? allItems.filter(i => i.category === value) : allItems;
+        const tagFiltered = activeTag ? itemsInCat.filter(i => (i.tags || []).includes(activeTag)) : itemsInCat;
+        const count = tagFiltered.filter(matchesSearch).length;
+        item.querySelector('.menu-count').textContent = count;
+      });
+    }
+
     function renderFilters(){
-      const tags = [...new Set(allItems.flatMap(i => i.tags || []))].sort();
+      const relevantItems = activeCategory ? allItems.filter(i => i.category === activeCategory) : allItems;
+      const tags = [...new Set(relevantItems.flatMap(i => i.tags || []))].sort();
       const filtersEl = document.getElementById('filters');
       filtersEl.innerHTML = '';
 
@@ -247,10 +385,13 @@
     }
 
     function render(){
+      updateSidebarCounts();
       const main = document.getElementById('main');
       main.innerHTML = '';
 
-      const categories = [...new Set(allItems.map(i => i.category))];
+      const categories = activeCategory
+        ? [activeCategory]
+        : [...new Set(allItems.map(i => i.category))];
       let anyVisible = false;
 
       categories.forEach(cat => {

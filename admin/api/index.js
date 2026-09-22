@@ -1,9 +1,6 @@
 const crypto = require('crypto');
 
-const categories = [
-  'News', 'News - Malaysia', 'IT / Software Engineering', 'Business',
-  'Cars', 'AI', 'Science', 'Lifestyle', 'Sports', 'Technology', 'Entertainment'
-];
+const categories = ['AI', 'Business', 'Cars', 'Christianity', 'Entertainment', 'Fintech', 'IT / Software Engineering', 'Lifestyle', 'News', 'News - Malaysia', 'Science', 'Sports', 'Technology'];
 
 function json(res, status, body, headers = {}) {
   res.statusCode = status;
