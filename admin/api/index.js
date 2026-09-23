@@ -234,6 +234,35 @@ module.exports = async (req, res) => {
       setSession(res, sessionToken());
       return json(res, 200, { authenticated: true });
     }
+    
+    if (req.method === 'POST' && route === '/api/preview') 
+    {
+      const { url } = req.body || {};
+      if (!url) return res.status(400).json({ error: 'URL is required' });
+
+      // YouTube oEmbed Integration
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        try {
+          const oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+          const response = await fetch(oembedUrl);
+          if (response.ok) {
+            const data = await response.json();
+            return res.status(200).json({
+              item: {
+                title: data.title || 'YouTube Video',
+                summary: `Video by ${data.author_name || 'YouTube'}`,
+                url: url,
+                source: 'YouTube',
+                date: new Date().toISOString().split('T')[0]
+              }
+            });
+          }
+        } catch (err) {
+          // Fallback to standard scraper if oEmbed fails
+        }
+    }
+
+
     if (req.method === 'POST' && route === '/api/logout') {
       setSession(res, '', 0);
       return json(res, 200, { authenticated: false });
