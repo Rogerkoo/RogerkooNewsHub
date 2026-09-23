@@ -61,6 +61,23 @@ def fetch_article(url):
     if parsed.scheme not in ("http", "https") or not parsed.netloc:
         raise ValueError("Enter a complete http:// or https:// URL.")
 
+    # YouTube oEmbed handling
+    if "youtube.com" in parsed.netloc or "youtu.be" in parsed.netloc:
+        oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
+        req = Request(oembed_url, headers={"User-Agent": "NewsHub/1.0"})
+        try:
+            with urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+                return {
+                    "title": data.get("title", "YouTube Video"),
+                    "summary": f"Video by {data.get('author_name', 'YouTube')}",
+                    "url": url,
+                    "source": "YouTube",
+                    "date": datetime.now(timezone.utc).date().isoformat()
+                }
+        except Exception:
+            pass  # Fall back to standard scraper if oEmbed fails
+
     request = Request(url, headers={"User-Agent": "NewsHub/1.0 article metadata reader"})
     with urlopen(request, timeout=15) as response:
         content_type = response.headers.get_content_type()
