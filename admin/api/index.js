@@ -235,8 +235,7 @@ module.exports = async (req, res) => {
       return json(res, 200, { authenticated: true });
     }
     
-    if (req.method === 'POST' && route === '/api/preview') 
-    {
+    if (req.method === 'POST' && route === '/api/preview') {
       const { url } = req.body || {};
       if (!url) return res.status(400).json({ error: 'URL is required' });
 
@@ -257,11 +256,12 @@ module.exports = async (req, res) => {
               }
             });
           }
-        } catch (err) {
+        }
+        catch (err) {
           // Fallback to standard scraper if oEmbed fails
         }
+      }
     }
-
 
     if (req.method === 'POST' && route === '/api/logout') {
       setSession(res, '', 0);
