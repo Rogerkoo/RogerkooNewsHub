@@ -327,6 +327,86 @@
       ],
       "date": "2026-09-22",
       "addedAt": "2026-09-22T06:57:19.896Z"
+    },
+    {
+      "title": "The Parable of the Cancer Cell",
+      "summary": "Cancer is a remarkable parable for sin, in both its disastrous nature and its available cure.",
+      "url": "https://www.thegospelcoalition.org/article/parable-cancer-cell/",
+      "source": "The Gospel Coalition",
+      "category": "Christianity",
+      "tags": [
+        "christianity",
+        "the gospel coalition"
+      ],
+      "date": "2026-09-20",
+      "addedAt": "2026-09-22T20:20:37.296Z"
+    },
+    {
+      "title": "Landslide forces Cheras apartment residents out of their homes, underground water leak suspected",
+      "summary": "KUALA LUMPUR, Sept 23 — Residents of an apartment block in Bandar Damai Perdana, Cheras, were ordered to evacuate their homes last night following a landslide near the building,...",
+      "url": "https://www.malaymail.com/news/malaysia/2026/09/23/landslide-forces-cheras-apartment-residents-out-of-their-homes-underground-water-leak-suspected/236156",
+      "source": "Malay Mail",
+      "category": "News - Malaysia",
+      "tags": [
+        "malaysia",
+        "cheras"
+      ],
+      "date": "2026-09-23",
+      "addedAt": "2026-09-23T01:53:25.909Z"
+    },
+    {
+      "title": "Singapore’s sovereign wealth fund cashes out over RM1 bil in Sunway Healthcare shares — report",
+      "summary": "Singapore’s sovereign wealth fund sold shares in Sunway Healthcare Holdings Bhd (KL:SUNMED) worth over RM1 billion on Tuesday, according to a news report.",
+      "url": "https://theedgemalaysia.com/node/818835",
+      "source": "The Edge Malaysia",
+      "category": "News - Malaysia",
+      "tags": [
+        "malaysia",
+        "business",
+        "sunway"
+      ],
+      "date": "2026-09-22",
+      "addedAt": "2026-09-23T01:54:24.615Z"
+    },
+    {
+      "title": "Clean Code Is Not the Same as Clear Code: Comments Were Never the Problem | daily.dev",
+      "summary": "An engineering opinion piece argues that the &#x27;clean code means no comments&#x27; philosophy is misguided, showing that some code (like dense regex) needs...",
+      "url": "https://dly.to/QOzAuWVXGAf",
+      "source": "daily.dev",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering"
+      ],
+      "date": "2026-09-22",
+      "addedAt": "2026-09-23T03:08:40.148Z"
+    },
+    {
+      "title": "How I Send 100GB+ Files Directly Between Browsers Without Cloud Storage",
+      "summary": "Most file-sharing products are built around the same basic idea:   Upload the file to a server. Store...",
+      "url": "https://dev.to/anirban00537/how-i-send-100gb-files-directly-between-browsers-without-cloud-storage-544j",
+      "source": "DEV Community",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering"
+      ],
+      "date": "2026-09-23",
+      "addedAt": "2026-09-23T05:23:52.122Z"
+    },
+    {
+      "title": "The one law the whole series assumes: an AI that goes down silently is worse than one that's dead",
+      "summary": "AI Harness Engineering · Essay Six · derek wang (derekwang85)      The hardest constraint in this...",
+      "url": "https://dev.to/derekwang85/the-one-law-the-whole-series-assumes-an-ai-that-goes-down-silently-is-worse-than-one-thats-dead-3fc7",
+      "source": "DEV Community",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering",
+        "ai"
+      ],
+      "date": "2026-09-23",
+      "addedAt": "2026-09-23T05:58:08.394Z"
     }
   ]
 }
