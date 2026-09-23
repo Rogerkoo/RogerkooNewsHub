@@ -380,6 +380,19 @@
       ],
       "date": "2026-09-22",
       "addedAt": "2026-09-23T03:08:40.148Z"
+    },
+    {
+      "title": "How I Send 100GB+ Files Directly Between Browsers Without Cloud Storage",
+      "summary": "Most file-sharing products are built around the same basic idea:   Upload the file to a server. Store...",
+      "url": "https://dev.to/anirban00537/how-i-send-100gb-files-directly-between-browsers-without-cloud-storage-544j",
+      "source": "DEV Community",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering"
+      ],
+      "date": "2026-09-23",
+      "addedAt": "2026-09-23T05:23:52.122Z"
     }
   ]
 }
