@@ -586,7 +586,9 @@
       "url": "https://dev.to/infoinlet1/everyones-learning-to-prompt-better-thats-the-wrong-skill-544o",
       "source": "DEV Community",
       "category": "AI",
-      "tags": [],
+      "tags": [
+        "ai"
+      ],
       "date": "2026-09-26",
       "addedAt": "2026-09-26T05:55:27.745Z"
     }
