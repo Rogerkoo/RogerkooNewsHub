@@ -805,6 +805,18 @@
       ],
       "date": "2026-09-28",
       "addedAt": "2026-09-28T23:41:21.769Z"
+    },
+    {
+      "title": "Prompt Injection Is the New SQL Injection — But This Time, It’s Worse",
+      "summary": "in the early 2000s, developers learned a painful lesson: never mix user input with executable...",
+      "url": "https://dev.to/iamjpsharma/prompt-injection-is-the-new-sql-injection-but-this-time-its-worse-59j9",
+      "source": "DEV Community",
+      "category": "AI",
+      "tags": [
+        "ai"
+      ],
+      "date": "2026-09-28",
+      "addedAt": "2026-09-28T23:47:24.144Z"
     }
   ]
 }
