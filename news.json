@@ -842,6 +842,18 @@
       ],
       "date": "2026-09-28",
       "addedAt": "2026-09-29T00:08:33.298Z"
+    },
+    {
+      "title": "OpenAI reportedly cancels GPT-6.1 Astra",
+      "summary": "According to The New York Times, OpenAI scrapped GPT-6.1 Astra’s release because it didn’t meet safety standards.",
+      "url": "https://www.engadget.com/2271626/openai-cancels-gpt-6-1-astra-release-deceptive-behavior/",
+      "source": "Engadget",
+      "category": "AI",
+      "tags": [
+        "ai"
+      ],
+      "date": "2026-09-29",
+      "addedAt": "2026-09-29T12:18:24.308Z"
     }
   ]
 }
