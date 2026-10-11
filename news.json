@@ -1192,6 +1192,20 @@
       ],
       "date": "2026-10-10",
       "addedAt": "2026-10-11T01:51:49.349Z"
+    },
+    {
+      "title": "I pushed C# until it broke: 5 hard limits, tested",
+      "summary": "How far can an int count, how big can an array get, how deep can you recurse? Five experiments run for real on .NET 10, each ending in something useful at work.",
+      "url": "https://dev.to/nazecode/i-pushed-c-until-it-broke-5-hard-limits-tested-54eb",
+      "source": "DEV Community",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering",
+        "c"
+      ],
+      "date": "2026-10-11",
+      "addedAt": "2026-10-11T02:02:49.796Z"
     }
   ]
 }
