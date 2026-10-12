@@ -1244,6 +1244,20 @@
       ],
       "date": "2026-10-11",
       "addedAt": "2026-10-11T02:10:54.919Z"
+    },
+    {
+      "title": "When you paste an error into an AI agent, you're handing it your conclusion",
+      "summary": "Pasting only the error line into an AI coding agent means it fixes the symptom you chose, not the actual failure. What actually unblocks the agent is the surrounding evidence: the input that triggered it, the state at the time, and a way to reproduce locally.",
+      "url": "https://dev.to/jeff_pdc/when-you-paste-an-error-into-an-ai-agent-youre-handing-it-your-conclusion-dc0",
+      "source": "DEV Community",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering",
+        "ai"
+      ],
+      "date": "2026-10-11",
+      "addedAt": "2026-10-12T00:09:30.438Z"
     }
   ]
 }
