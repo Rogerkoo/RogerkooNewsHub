@@ -1359,6 +1359,19 @@
       ],
       "date": "2026-10-15",
       "addedAt": "2026-10-15T04:11:46.995Z"
+    },
+    {
+      "title": "Why Anthropic ditched Git? | daily.dev",
+      "summary": "Anthropic replaced Git with its own version control system, Scion, plus a code review tool called Antique, because Git couldn&#x27;t keep up with its agent fleet....",
+      "url": "https://dly.to/v7Ib8cbK6FG",
+      "source": "daily.dev",
+      "category": "IT / Software Engineering",
+      "tags": [
+        "it",
+        "software engineering"
+      ],
+      "date": "2026-10-27",
+      "addedAt": "2026-11-01T00:34:21.829Z"
     }
   ]
 }
